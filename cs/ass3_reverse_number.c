@@ -2,7 +2,7 @@
 #include<assert.h>
 #include<math.h>
 
-main(int argc, char const *argv[])
+int main(int argc, char const *argv[])
 {
     char current_ch;
     int current_digit = 0, num_of_test_cases = 0;
