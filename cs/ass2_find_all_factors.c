@@ -7,7 +7,7 @@ int is_prime(long int num);
 int main(int argc, char const *argv[])
 {
     char one_ch;
-    while(scanf("%c", &one_ch) != EOF) {
+    while(scanf("%c", &one_ch)) {
         long int N = 0;
         if(one_ch != '\n') {
             N = N * 10;
