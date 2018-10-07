@@ -11,7 +11,7 @@ int main(int argc, char const *argv[])
         int target_number = 0, sign = 1;
         long long int ref_number = 0;    // used to judge whether overflow at one specific time, which is not the number used to store and print
         double num_of_digits = 0.0;
-        while(scanf("%c", ¤t_ch)) {
+        while(scanf("%c", &current_ch)) {
             if(current_ch == '\n') {
             	printf("%d\n", target_number);
             	break;
@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
                 assert(0 <= current_digit && current_digit <= 9);              
                 ref_number += current_digit * pow(10.0, num_of_digits) * sign;
                 if(- pow(2.0, 31.0) > ref_number || pow(2.0, 31.0) - 1 < ref_number) {
-                    while(scanf("%c", ¤t_ch)) {
+                    while(scanf("%c", &current_ch)) {
                         if(current_ch == '\n') {
                             target_number = 0;
                             printf("%d\n", target_number);
