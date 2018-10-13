@@ -1,10 +1,12 @@
 #include<iostream>
-#include<string>
+
+#include "decl.h"
 
 using namespace std;
 
 int main() {
-	string s1 = "li";
-	cout << s1.size() << endl;
+	string s1 = "2*(9+6/3-5)+4";
+	Mid2Post mid2Post(s1);
+	mid2Post.transformer();
 	return 0;
 }
