@@ -16,7 +16,21 @@ public:
 	int get_priority(char ch);
 	void deal_current_ch(char current_ch);
 	void transformer();
+	void cout_top();
 
+};
+
+class Calculator {
+private:
+	char current_operator;
+	std::string target_exp;
+	int res = 0;
+	std::stack <char> ch_stack;
+public:
+	Calculator(std::string obj_str);
+	~Calculator();
+	void calculate();
+	void calculate_one_step();
 };
 
 #endif
