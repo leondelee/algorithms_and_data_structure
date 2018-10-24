@@ -1,20 +1,6 @@
-//
-<<<<<<< HEAD
-// Created by speit on 18-10-20.
-//
 
-#ifndef MAZE_DECL_H
-#define MAZE_DECL_H
-
-class Queue {
-private:
-
-};
-#endif //MAZE_DECL_H
-=======
 // Created by llw on 18-10-20.
 //
-
 #ifndef DEVOIR_DECL_H
 #define DEVOIR_DECL_H
 
@@ -32,4 +18,3 @@ public:
     int length();
 };
 #endif DEVOIR_DECL_H
->>>>>>> e9e7f0c010318887ded3afd4bcbbb024ff793bf5
