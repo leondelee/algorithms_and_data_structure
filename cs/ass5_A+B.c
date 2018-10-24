@@ -8,7 +8,7 @@ int main() {
     for(int i = 0; i < num_of_test_cases; i++) {
         int first_array[105], second_array[105], result_array[105];
         int first_number_digits = 0, second_number_digits = 0;
-        int current_digit, result_digit, cache_number = 0, tmp_sum = 0;
+        int current_digit, result_digit, cache_number = 0;
         int num_of_loops = 0, num_of_result_length = 0;
         int first_number_flag = 1;  // judge 1st or 2nd number
         while(scanf("%c", &current_ch)) {
