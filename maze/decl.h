@@ -4,17 +4,16 @@
 #ifndef DEVOIR_DECL_H
 #define DEVOIR_DECL_H
 
-<template T> class Queue {
-private:
+template <typename T> class Queue {
+public:
     int max_size;
     int front;
     int rear;
     T* list_array;
-public:
     Queue(int size);
-    ~Queue();
     void enqueue(const T &element);
-    T delete_queue();
-    int length();
+    T dequeue();
+    int get_queue_length();
+    void output_queue();
 };
-#endif DEVOIR_DECL_H
+#endif
