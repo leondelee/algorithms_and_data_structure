@@ -39,7 +39,7 @@ private:
 public:
     Env* env;
     Queue<State>* state_queue;
-    Agent(Env env);
+    Agent(Env env, Queue<State> state_queue);
     void exploit(State current_state);
     int get_min_steps();
     void draw_path();

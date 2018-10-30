@@ -9,17 +9,14 @@
 
 using namespace std;
 
-Agent::Agent(Env env) {
+Agent::Agent(Env env, Queue<State> state_queue) {
     // parameter initialisations
     this->env = &env;
     this->maze = this->env->maze;
     this->maze_size = this->env->maze_size;
     // queue assignment
-    Queue<State> state_queue(100);
     this->state_queue = & state_queue;
-    cout << "aaa" << this->state_queue->rear << endl;
     this->state_queue->enqueue(this->env->entrance);
-    cout << "aaa" << this->state_queue->rear << endl;
     // maze output
     cout << "Target maze is: " << endl;
     this->output_maze(this->env->maze);
@@ -78,8 +75,8 @@ void Agent::output_maze(char** maze) {
 }
 
 void Agent::draw_path() {
-    cout << "123" << this->state_queue->front << endl;
     char** tmp_maze;
+    cout << "aaa" << this->state_queue->rear << endl;
     tmp_maze = new char* [this->maze_size];
     for(int i = 0; i < this->maze_size; i ++) tmp_maze[i] = new char[this->maze_size];
     for(int i = 0; i < this->maze_size; i++) {
@@ -88,8 +85,8 @@ void Agent::draw_path() {
         }
     }
     int queue_length = this->state_queue->get_queue_length();
-//    assert(queue_length >= 1);
-    cout << "aaa" << this->state_queue->rear << endl;
+    assert(1 == 2);
+    assert(queue_length >= 1);
     for(int i = 0; i < this->state_queue->get_queue_length(); i ++) {
         int row = this->state_queue->list_array[i].row;
         int column = this->state_queue->list_array[i].column;
