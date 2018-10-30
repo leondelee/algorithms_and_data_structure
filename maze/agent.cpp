@@ -10,11 +10,17 @@
 using namespace std;
 
 Agent::Agent(Env env) {
+    // parameter initialisations
     this->env = &env;
     this->maze = this->env->maze;
     this->maze_size = this->env->maze_size;
-    Queue<State> state_queue(1000);
+    // queue assignment
+    Queue<State> state_queue(100);
     this->state_queue = & state_queue;
+    cout << "aaa" << this->state_queue->rear << endl;
+    this->state_queue->enqueue(this->env->entrance);
+    cout << "aaa" << this->state_queue->rear << endl;
+    // maze output
     cout << "Target maze is: " << endl;
     this->output_maze(this->env->maze);
 }
@@ -67,23 +73,27 @@ void Agent::output_maze(char** maze) {
         }
         cout << endl;
     }
-    cout << "Entrance position is (" << this->env->entrance.column << ", " << this->env->entrance.row << ")." << endl;
-    cout << "Exit position is (" << this->env->exit.column << ", " << this->env->exit.row << ")." << endl;
+    cout << "Entrance position is (column = " << this->env->entrance.column << ", row = " << this->env->entrance.row << ")." << endl;
+    cout << "Exit position is (column = " << this->env->exit.column << ", row = " << this->env->exit.row << ")." << endl;
 }
 
 void Agent::draw_path() {
+    cout << "123" << this->state_queue->front << endl;
     char** tmp_maze;
+    tmp_maze = new char* [this->maze_size];
+    for(int i = 0; i < this->maze_size; i ++) tmp_maze[i] = new char[this->maze_size];
     for(int i = 0; i < this->maze_size; i++) {
         for(int j = 0; j < this->maze_size; j ++) {
             tmp_maze[i][j] = this->maze[i][j];
         }
     }
     int queue_length = this->state_queue->get_queue_length();
-    assert(queue_length >= 1);
+//    assert(queue_length >= 1);
+    cout << "aaa" << this->state_queue->rear << endl;
     for(int i = 0; i < this->state_queue->get_queue_length(); i ++) {
         int row = this->state_queue->list_array[i].row;
         int column = this->state_queue->list_array[i].column;
-        tmp_maze[row][column] = state_queue->list_array[i].distance;
+        tmp_maze[row][column] = state_queue->list_array[i].distance + 48;
     }
     this->output_maze(tmp_maze);
 }
