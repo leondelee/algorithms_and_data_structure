@@ -4,16 +4,10 @@
 #ifndef DEVOIR_DECL_H
 #define DEVOIR_DECL_H
 
-enum Directions {
-    UP = 0,
-    DOWN = 1,
-    LEFT = 2,
-    RIGHT = 3
-};
-
 struct State {
-    int x, y;
-    Directions intention;
+    int row; // the row order
+    int column; // the column order
+    int distance;
 };
 
 template <typename T> class Queue {
@@ -29,12 +23,26 @@ public:
     void output_queue();
 };
 
+class Env {
+public:
+    int maze_size;
+    char** maze;
+    State entrance, exit;
+    Env();
+};
+
 class Agent {
 private:
-    int maze_size;
     int min_steps;
-    vector<Directions>
+    int maze_size;
+    char** maze;
 public:
-    Queue<int>
+    Env* env;
+    Queue<State>* state_queue;
+    Agent(Env env);
+    void exploit(State current_state);
+    int get_min_steps();
+    void draw_path();
+    void output_maze(char** maze);
 };
 #endif

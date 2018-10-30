@@ -1,10 +1,10 @@
 //
 // Created by llw on 18-10-20.
 //
-
-#include "decl.h"
 #include <iostream>
 #include <assert.h>
+
+#include "decl.h"
 
 using namespace std;
 
