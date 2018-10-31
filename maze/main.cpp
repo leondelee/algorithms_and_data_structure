@@ -12,5 +12,5 @@ int main() {
     Queue<State> state_queue(100);
     Agent agent(maze, state_queue);
     agent.draw_path();
-
+    cout << agent.state_queue->rear << endl;
 }

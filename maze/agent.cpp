@@ -19,7 +19,7 @@ Agent::Agent(Env env, Queue<State> state_queue) {
     this->state_queue->enqueue(this->env->entrance);
     // maze output
     cout << "Target maze is: " << endl;
-    this->output_maze(this->env->maze);
+    //this->output_maze(this->env->maze);
 }
 
 void Agent::exploit(State current_state) {
