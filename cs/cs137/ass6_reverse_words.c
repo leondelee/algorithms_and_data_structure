@@ -29,13 +29,20 @@ void deal_line() {
     char current_ch;
     char current_word[1000];
     while(scanf("%c", &current_ch)) {
-        current_word[word_length] = current_ch;
-        word_length ++;
         if(current_ch == ' ') {
             reverse_word(current_word, word_length);
+            printf(" ");
             word_length = 0;
         }
-        if(current_ch == '\n') break;
+        else if(current_ch == '\n') {
+            reverse_word(current_word, word_length);
+            printf("\n");
+            break;
+        }
+        else {
+            current_word[word_length] = current_ch;
+            word_length ++;
+        }
     }
 }
 
