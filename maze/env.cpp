@@ -11,7 +11,7 @@ Env::Env() {
     cin >> this->maze_size;
     cin.get();
     this->maze = new char* [this->maze_size];
-    cout << "Next you need to build the maze yourself.Only two values are acceptable: *(for \"wall\") or 0(for \"way).\"" << endl;
+    cout << "Next you need to build the maze yourself.Only two values are acceptable: *(for \"wall\") or #(for \"way).\"" << endl;
     for(int i = 0; i < this->maze_size; i ++) {
         int idx = 0;
         this->maze[i] = new char [this->maze_size];
@@ -31,7 +31,7 @@ Env::Env() {
         }
         getline(cin, line);
         for(int j = 0; j < line.size(); j ++) {
-            if(line[j] == '0' || line[j] == '*') {
+            if(line[j] == '#' || line[j] == '*') {
                 this->maze[i][idx] = line[j];
                 idx ++;
             }

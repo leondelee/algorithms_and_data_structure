@@ -8,8 +8,8 @@
 
 using namespace std;
 
-template <typename T> Queue<T>::Queue(int size) {
-    this->max_size = size + 1;
+template <typename T> Queue<T>::Queue() {
+    this->max_size = QUEUE_SIZE + 1;
     this->front = 0;
     this->rear = this->max_size - 1;
     this->list_array =new T[this->max_size];

@@ -1,6 +1,3 @@
-//
-// Created by llw on 18-10-31.
-//
 #include <stdio.h>
 #include <assert.h>
 
@@ -28,15 +25,26 @@ void deal_line() {
     int word_length = 0;
     char current_ch;
     char current_word[1000];
-    while(scanf("%c", &current_ch)) {
-        current_word[word_length] = current_ch;
-        word_length ++;
-        if(current_ch == ' ') {
-            reverse_word(current_word, word_length);
-            word_length = 0;
+    while(1) {
+        if(scanf("%c", &current_ch) != EOF) {
+            if(current_ch == ' ') {
+                reverse_word(current_word, word_length);
+                printf(" ");
+                word_length = 0;
+            }
+            else if(current_ch == '\n') {
+                reverse_word(current_word, word_length);
+                printf("\n");
+                break;
+            }
+            else {
+                current_word[word_length] = current_ch;
+                word_length ++;
+            }
         }
-        if(current_ch == '\n') break;
+        else {
+            reverse_word(current_word, word_length);
+            break;
+        }
     }
 }
-
-
