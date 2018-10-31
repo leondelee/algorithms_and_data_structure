@@ -8,9 +8,6 @@
 using namespace std;
 
 int main() {
-    Env maze;
-    Queue<State> state_queue(100);
-    Agent agent(maze, state_queue);
-    agent.draw_path();
-
+    Agent agent;
+    cout << "min steps are " << agent.get_min_steps() << endl;
 }
