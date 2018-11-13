@@ -3,21 +3,22 @@
 //
 #include <iostream>
 
-#include "implementation/BTP.cpp"
+#include "implementation/BST.h"
 
 using namespace std;
 
 class Test {
 public:
+    int value;
     Test() {cout << 1 << endl;}
-    Test(int a) {cout << a << endl;}
+    Test(int a) {a = 2; cout << a << endl;}
+    // void Fun(int a) const {value = 3;}
 };
 
 int main() {
-    BinaryTree<int, int>* tree = new BinaryTree<int, int>[5];
-    BinaryTree<int, int> tree1 = *(tree + 1);
-    BinaryTree<int, int>* ptr = & tree1;
-    tree1.set_left_node_ptr(ptr);
-    cout << tree1.get_left_node_ptr() << endl;
-    cout << tree1.get_right_node_ptr() << endl;
+    BinarySearchTree<int, float> bst;
+    bst.clear(bst.get_root());
+    int a = 1;
+    bst.find(bst.get_root(), a);
+    cout << bst.get_root() << endl;
 }

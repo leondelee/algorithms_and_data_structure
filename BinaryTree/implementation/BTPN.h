@@ -2,7 +2,12 @@
 // Created by speit on 18-11-10.
 // implementation of pointer version of binary tree
 //
+#ifndef BTPN_H_
+#define BTPN_H_
+
 #include <iostream>
+
+using namespace std;
 
 template <typename Key, typename E>
 class BinaryTreeNode {
@@ -16,14 +21,9 @@ public:
         left_node_ptr = NULL;
         right_node_ptr = NULL;
     }
-    BinaryTreeNode(Key arg_key, E arg_value, BinaryTreeNode* arg_left_node_ptr, BinaryTreeNode* arg_right_node_ptr) {
-        key = arg_key;
-        value = arg_value;
-        left_node_ptr = arg_left_node_ptr;
-        right_node_ptr = arg_right_node_ptr;
-    }
-
-    E get_value() const { return value;}
+    BinaryTreeNode<Key, E>* get_current_node_address() { return this; }
+    E get_value() const { return value; }
+    Key get_key() const { return key; }
     void set_value(const E& element) { value = element;}
     BinaryTreeNode<Key, E>* get_left_node_ptr() const { return left_node_ptr;}
     void set_left_node_ptr(BinaryTreeNode<Key, E>* arg_left_node_ptr) { left_node_ptr = arg_left_node_ptr;}
@@ -36,3 +36,5 @@ public:
 //        return ::new BinaryTreeNode<Key, E>;
 //    }
 };
+
+#endif
