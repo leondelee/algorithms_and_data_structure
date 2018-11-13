@@ -21,4 +21,5 @@ int main() {
     int a = 1;
     bst.find(bst.get_root(), a);
     cout << bst.get_root() << endl;
+
 }
