@@ -15,15 +15,17 @@ public:
     Test(int a) {a = 2; cout << a << endl;}
 };
 
+void test_ref(int& a) {
+    a += 1;
+}
+
 int main() {
     BinarySearchTree<int, float> bst;
-    bst.clear(bst.get_root());
-    int a1 = 1, a2 = 2, a3 = 0;
+    int a1 = 1, a2 = 2, a3 = - 3;
     float b = 0.1;
-    bst.insert(a1, b);
-    bst.insert(a2, b);
-    bst.insert(a3, b);
-    bst.find(a3);
-    bst.remove(a3);
-    bst.find(a3);
+    for(int i = 10; i != 0; i--) {
+        bst.insert(i, b);
+    }
+    bst.remove(2);
+    bst.get_root()->mid_order(bst.get_root());
 }
