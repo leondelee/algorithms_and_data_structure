@@ -17,19 +17,19 @@ private:
     BinaryTreeNode<Key, E>* left_node_ptr;
     BinaryTreeNode<Key, E>* right_node_ptr;
 public:
-    BinaryTreeNode() {
-        left_node_ptr = NULL;
-        right_node_ptr = NULL;
-    }
+    BinaryTreeNode() { }
+
     BinaryTreeNode<Key, E>* get_current_node_address() { return this; }
-    E get_value() const { return value; }
-    Key get_key() const { return key; }
-    void set_value(const E& element) { value = element;}
+    E get_value() const { return this->value; }
+    Key get_key() const { return this->key; }
+    void set_value(const E& element) { this->value = element; }
+    void set_key(const Key& key) { this->key = key; }
+
     BinaryTreeNode<Key, E>* get_left_node_ptr() const { return left_node_ptr;}
     void set_left_node_ptr(BinaryTreeNode<Key, E>* arg_left_node_ptr) { left_node_ptr = arg_left_node_ptr;}
     BinaryTreeNode<Key, E>* get_right_node_ptr() const { return right_node_ptr;}
     void set_right_node_ptr(BinaryTreeNode<Key, E>* arg_right_node_ptr) { right_node_ptr = arg_right_node_ptr;}
-    bool is_leaf() { return (left_node_ptr ==   NULL) && (right_node_ptr == NULL);}
+    bool is_leaf() { return (this->left_node_ptr ==   NULL) && (this->right_node_ptr == NULL);}
 
     // overloading new and delete
 //    void *operator new(size_t) {

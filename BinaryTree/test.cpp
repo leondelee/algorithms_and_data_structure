@@ -12,13 +12,14 @@ public:
     int value;
     Test() {cout << 1 << endl;}
     Test(int a) {a = 2; cout << a << endl;}
-    // void Fun(int a) const {value = 3;}
 };
 
 int main() {
     BinarySearchTree<int, float> bst;
     bst.clear(bst.get_root());
-    int a = 1;
-    bst.find(bst.get_root(), a);
-    cout << bst.get_root() << endl;
+    int a1 = 1, a2 = 2;
+    float b = 0.1;
+    bst.insert(a1, b);
+    bst.insert(a2, b);
+    bst.find(a2);
 }
