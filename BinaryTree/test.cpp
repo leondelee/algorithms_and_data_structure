@@ -24,4 +24,6 @@ int main() {
     bst.insert(a2, b);
     bst.insert(a3, b);
     bst.find(a3);
+    bst.remove(a3);
+    bst.find(a3);
 }

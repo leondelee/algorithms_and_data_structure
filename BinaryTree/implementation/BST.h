@@ -60,7 +60,7 @@ private:
             this->private_insert(left_node_ptr, key, value);
             return;
         }
-        else if(key > root->get_key()) {
+        else if(key >= root->get_key()) {
             if(root->get_right_node_ptr() == NULL) {
                 BinaryTreeNode<Key, E>* right_node_ptr = new BinaryTreeNode<Key, E>;
                 root->set_right_node_ptr(right_node_ptr);
@@ -73,7 +73,7 @@ private:
             this->private_insert(right_node_ptr, key, value);
             return;
         }
-        else if(key == root->get_key()) cout << "Record with key \"" << key << "\" already exist!" << endl;
+        // else if(key == root->get_key()) cout << "Record with key \"" << key << "\" already exist!" << endl;
     }
 public:
     BinarySearchTree() {
@@ -90,6 +90,14 @@ public:
     BinaryTreeNode<Key, E>* find(Key& key) const { return this->private_find(this->root, key); }
 
     void insert(Key& key, E& value) { this->private_insert(this->root, key, value); }
+
+    void remove(Key& key) {
+        BinaryTreeNode<Key, E> node_found = this->find(key);
+        if(node_found == NULL) cout << "Key \"" << key << "\" not found!" << endl;
+        else {
+            this->clear(node_found);
+        }
+    }
 
 };
 
