@@ -3,6 +3,7 @@
 //
 #include <iostream>
 
+#include "../my_tools/tools.h"
 #include "implementation/BST.h"
 
 using namespace std;
@@ -17,9 +18,10 @@ public:
 int main() {
     BinarySearchTree<int, float> bst;
     bst.clear(bst.get_root());
-    int a1 = 1, a2 = 2;
+    int a1 = 1, a2 = 2, a3 = 0;
     float b = 0.1;
     bst.insert(a1, b);
     bst.insert(a2, b);
-    bst.find(a2);
+    bst.insert(a3, b);
+    bst.find(a3);
 }

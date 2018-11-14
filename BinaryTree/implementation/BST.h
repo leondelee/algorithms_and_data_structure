@@ -28,7 +28,7 @@ private:
 
     BinaryTreeNode<Key, E>* private_find(BinaryTreeNode<Key, E>* root, Key& key) const {
         if(root == NULL) {
-            cout << "Element \"" << key <<  "\" Not Found." << endl;
+            cout << "Record with key \"" << key <<  "\" Not Found." << endl;
             return root;
         }
         else if(root->get_key() > key) this->private_find(root->get_left_node_ptr(), key);
@@ -48,29 +48,41 @@ private:
             return;
         }
         else if(key < root->get_key()) {
-            if(root->is_leaf()) {
+            if(root->get_left_node_ptr() == NULL) {
                 BinaryTreeNode<Key, E>* left_node_ptr = new BinaryTreeNode<Key, E>;
                 root->set_left_node_ptr(left_node_ptr);
+                root->get_left_node_ptr()->set_key(key);
+                root->get_left_node_ptr()->set_value(value);
+                this->num_of_nodes += 1;
+                return;
             }
             BinaryTreeNode<Key, E>* left_node_ptr = root->get_left_node_ptr();
             this->private_insert(left_node_ptr, key, value);
             return;
         }
-        else if(key >= root->get_key()) {
-            if(root->is_leaf()) {
+        else if(key > root->get_key()) {
+            if(root->get_right_node_ptr() == NULL) {
                 BinaryTreeNode<Key, E>* right_node_ptr = new BinaryTreeNode<Key, E>;
                 root->set_right_node_ptr(right_node_ptr);
+                root->get_right_node_ptr()->set_key(key);
+                root->get_right_node_ptr()->set_value(value);
+                this->num_of_nodes += 1;
+                return;
             }
             BinaryTreeNode<Key, E>* right_node_ptr = root->get_right_node_ptr();
             this->private_insert(right_node_ptr, key, value);
             return;
         }
+        else if(key == root->get_key()) cout << "Record with key \"" << key << "\" already exist!" << endl;
     }
 public:
     BinarySearchTree() {
         this->num_of_nodes = 0;
         this->root = NULL;
     }
+
+    int get_nodes_number() { return this->num_of_nodes; }
+
     BinaryTreeNode<Key, E>* get_root() const { return this->root; }
 
     void clear(BinaryTreeNode<Key, E>* root) { this->private_clear(root); }
