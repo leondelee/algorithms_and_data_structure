@@ -34,7 +34,7 @@ private:
         assert(this->num_of_nodes >= 0);
     }
 
-    BinaryTreeNode<Key, E>*& private_find(BinaryTreeNode<Key, E>*& root, Key& key, bool verbose = false) {
+    BinaryTreeNode<Key, E>*& private_find(BinaryTreeNode<Key, E>*& root, Key key, bool verbose = false) {
         if(root == NULL) {
             cout << "Record with key \"" << key <<  "\" Not Found." << endl;
             return root;
@@ -47,7 +47,7 @@ private:
         }
     }
 
-    void private_insert(BinaryTreeNode<Key, E>*& root, Key& key, E& value) {
+    void private_insert(BinaryTreeNode<Key, E>*& root, Key key, E& value) {
         if(root == NULL) {
             root = new BinaryTreeNode<Key, E>;
             root->set_value(value);
@@ -99,6 +99,7 @@ private:
         nds->key = min_node->get_key();
         nds->value = min_node->get_value();
         min_node = min_node->get_right_node_ptr();
+        this->num_of_nodes --;
         return nds;
     }
 
@@ -122,9 +123,9 @@ public:
 
     void clear(BinaryTreeNode<Key, E>*& root) { this->private_clear(root); }
 
-    BinaryTreeNode<Key, E>*& find(Key& key) { return this->private_find(this->root, key, true); }
+    BinaryTreeNode<Key, E>*& find(Key key) { return this->private_find(this->root, key, true); }
 
-    void insert(Key& key, E& value) { this->private_insert(this->root, key, value); }
+    void insert(Key key, E& value) { this->private_insert(this->root, key, value); }
 
     BinaryTreeNode<Key, E>* get_min() {
         return this->private_get_min(this->root);
