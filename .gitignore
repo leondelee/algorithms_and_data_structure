@@ -1,5 +1,4 @@
 *.out
-*test*
 cs/test.c
 *.idea
 
