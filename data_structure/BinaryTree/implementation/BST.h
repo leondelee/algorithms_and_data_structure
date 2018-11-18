@@ -12,21 +12,29 @@
 using namespace std;
 
 template <typename Key, typename E>
+struct NodeDataStr {
+    Key key;
+    E value;
+};
+
+template <typename Key, typename E>
 class BinarySearchTree: public BinaryTreeNode<Key, E> {
 private:
     BinaryTreeNode<Key, E>* root;
     int num_of_nodes;
 
-    void private_clear(BinaryTreeNode<Key, E>* root){
+    void private_clear(BinaryTreeNode<Key, E>*& root){
         if(root == NULL) return;
-        this->clear(this->get_left_node_ptr());
-        this->clear(this->get_right_node_ptr());
-        delete root;
+        BinaryTreeNode<Key, E>*& left_node_ptr = root->get_left_node_ptr();
+        BinaryTreeNode<Key, E>*& right_node_ptr = root->get_right_node_ptr();
+        this->private_clear(left_node_ptr);
+        this->private_clear(right_node_ptr);
+        root = NULL;
         this->num_of_nodes -= 1;
         assert(this->num_of_nodes >= 0);
     }
 
-    BinaryTreeNode<Key, E>* private_find(BinaryTreeNode<Key, E>* root, Key& key) const {
+    BinaryTreeNode<Key, E>*& private_find(BinaryTreeNode<Key, E>*& root, Key& key, bool verbose = false) {
         if(root == NULL) {
             cout << "Record with key \"" << key <<  "\" Not Found." << endl;
             return root;
@@ -34,7 +42,7 @@ private:
         else if(root->get_key() > key) this->private_find(root->get_left_node_ptr(), key);
         else if(root->get_key() < key) this->private_find(root->get_right_node_ptr(), key);
         else {
-            cout << "Found " << key << " at address " << root << "." << endl;
+            if(verbose) cout << "Found " << key << " at address " << root << "." << endl;
             return root;
         }
     }
@@ -75,30 +83,58 @@ private:
         }
         // else if(key == root->get_key()) cout << "Record with key \"" << key << "\" already exist!" << endl;
     }
+
+    BinaryTreeNode<Key, E>*& private_get_min(BinaryTreeNode<Key, E>*& root) {
+        if(root->get_left_node_ptr() == NULL) return root;
+        else {
+            return this->private_get_min(root->get_left_node_ptr());
+        }
+    }
+
+    NodeDataStr<Key, E>* private_delete_min(BinaryTreeNode<Key, E>*& root) {
+        BinaryTreeNode<Key, E>*& min_node = this->private_get_min(root);
+        if(min_node == NULL) return NULL;
+        assert(min_node->get_left_node_ptr() == NULL);
+        NodeDataStr<Key, E>* nds = new NodeDataStr<Key, E>;
+        nds->key = min_node->get_key();
+        nds->value = min_node->get_value();
+        min_node = min_node->get_right_node_ptr();
+        return nds;
+    }
+
+    void private_remove(Key key) {
+        BinaryTreeNode<Key, E>*& root_found = this->private_find(this->root, key);
+        NodeDataStr<Key, E>* min_node_str = private_delete_min(root_found);
+        if(min_node_str == NULL) return;
+        root_found->set_key(min_node_str->key);
+        root_found->set_value(min_node_str->value);
+        return;
+    }
 public:
     BinarySearchTree() {
-        this->num_of_nodes = 0;
         this->root = NULL;
+        this->num_of_nodes = 0;
     }
 
     int get_nodes_number() { return this->num_of_nodes; }
 
     BinaryTreeNode<Key, E>* get_root() const { return this->root; }
 
-    void clear(BinaryTreeNode<Key, E>* root) { this->private_clear(root); }
+    void clear(BinaryTreeNode<Key, E>*& root) { this->private_clear(root); }
 
-    BinaryTreeNode<Key, E>* find(Key& key) const { return this->private_find(this->root, key); }
+    BinaryTreeNode<Key, E>*& find(Key& key) { return this->private_find(this->root, key, true); }
 
     void insert(Key& key, E& value) { this->private_insert(this->root, key, value); }
 
-    void remove(Key& key) {
-        BinaryTreeNode<Key, E> node_found = this->find(key);
-        if(node_found == NULL) cout << "Key \"" << key << "\" not found!" << endl;
-        else {
-            this->clear(node_found);
-        }
+    BinaryTreeNode<Key, E>* get_min() {
+        return this->private_get_min(this->root);
     }
 
+    NodeDataStr<Key, E>* delete_min() {
+        return this->private_delete_min(this->root);
+    }
+
+    void remove(Key key) { this->private_remove(key); }
 };
 
 #endif
