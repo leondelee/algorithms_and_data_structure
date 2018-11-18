@@ -8,9 +8,6 @@
 #include "../../../my_tools/tools.h"
 #include "BST.h"
 
-#define TYPE_HFN HuffmanNode<E>*
-#define TYPE_HFT HuffmanTree<E>*
-
 template <typename E>
 class HuffmanNode {
 public:
@@ -37,19 +34,19 @@ public:
 template <typename E> 
 class HuffmanIntNode: public HuffmanNode<E> {
 private:
-    TYPE_HFN left_node;
-    TYPE_HFN right_node;
+    HuffmanNode<E>* left_node;
+    HuffmanNode<E>* right_node;
 public:
-    HuffmanIntNode(TYPE_HFN ln, TYPE_HFN rn) {
+    HuffmanIntNode(HuffmanNode<E>* ln, HuffmanNode<E>* rn) {
         this->left_node = ln;
         this->right_node = rn;
     }
     int get_weight() { return this->left_node->get_weight() + this->right_node->get_weight(); }
     bool is_leaf() { return false; }
-    void set_left_node(TYPE_HFN node) { this->left_node = node; }
-    TYPE_HFN get_left_node() { return this->left_node; }
-    void set_right_node(TYPE_HFN node) { this->right_node = node; }
-    TYPE_HFN get_right_node() { return this->right_node; }
+    void set_left_node(HuffmanNode<E>* node) { this->left_node = node; }
+    HuffmanNode<E>* get_left_node() { return this->left_node; }
+    void set_right_node(HuffmanNode<E>* node) { this->right_node = node; }
+    HuffmanNode<E>* get_right_node() { return this->right_node; }
 };
 
 template <typename E>
@@ -58,8 +55,8 @@ private:
     HuffmanNode<E>* root;
 public:
     HuffmanTree(E it, int wgt) { this->root = new HuffmanLeafNode<E>(it, wgt); }
-    HuffmanTree(TYPE_HFT lt, TYPE_HFT rt) { this->root = new HuffmanIntNode<E>(lt->root, rt->root); }
-    TYPE_HFT get_root() { return this->root; }
+    HuffmanTree(HuffmanTree<E>* lt, HuffmanTree<E>* rt) { this->root = new HuffmanIntNode<E>(lt->root, rt->root); }
+    HuffmanNode<E>* get_root() { return this->root; }
     int get_weight() { return root->get_weight(); }
     bool is_leaf() { return this->root->is_leaf(); }
 };
