@@ -1,61 +1,42 @@
-//
-// Created by speit on 18-11-22.
-//
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
-#include <string.h>
 
-struct ArrayProperty {
-    char* array_string, start_position, end_position;
-    size_t array_length, string_length;
-    int ascending;
-    int iteration_manner;
-};
-
-void get_array_string_from_input(ArrayProperty* array_property) {
-    getline(& (* array_property).array_string, & (* array_property).array_length, stdin);
-    (* array_property).string_length = 2 * (* array_property).array_length;
-    if ((* array_property).array_length == 1) {
-        (* array_property).start_position = (* array_property).array_string;
-        (* array_property).end_position = (* array_property).array_string;
-        (* array_property).ascending = 1;
-        (* array_property).iteration_manner = 2;
-    }
-    else {
-        (* array_property).ascending = (int) (* (* array_property).array_string) <= (* ((* array_property).array_string + 2));
-        (* array_property).iteration_manner = (* array_property).ascending == 1 ? 2 : -2;
-        (* array_property).start_position = (* array_property).ascending == 1 ? (* array_property).array_string :
-                (* array_property).array_string + (* array_property).string_length - 2;
-        (* array_property).end_position = (* array_property).ascending == 1 ? (* array_property).array_string + (* array_property).string_length - 1 :
-                                          (* array_property).array_string - 1;
-    }
-    return;
-}
-
-float get_median(ArrayProperty* first_array_property_ptr, ArrayProperty* second_array_property_ptr) {
-    int sorted_count = 0;
+float get_median(float* first_array, float* second_array, long long int first_length, long long int second_length) {
+    int median_position = (first_length + second_length + 1) / 2;
+    int is_even = (first_length + second_length) % 2 == 0;
     float median = 0;
-    ArrayProperty pivot_ap = (* first_array_property_ptr).array_length >= (* second_array_property_ptr).array_length ? (* first_array_property_ptr)
-            : (* second_array_property_ptr);
-    ArrayProperty sup_ap = (* first_array_property_ptr).array_length < (* second_array_property_ptr).array_length ? (* first_array_property_ptr)
-                                                                                                                   : (* second_array_property_ptr);
-    int median_position = (first_array_property.array_length + second_array_property.array_length) / 2;
-    int is_odd = (first_array_property.array_length + second_array_property.array_length) % 2 == 1;
+    float* pivot_cursor = first_array;
+    float* sup_cursor = second_array;
+    float* first_end_position = first_array + first_length;
+    float* second_end_position = second_array + second_length;
+    float* current_cursor = NULL;
+    int sorted_count = 0;
+    while (1) {
+        float pivot = *pivot_cursor;
+        float sup = *sup_cursor;
 
-    char* pivot_cursor = pivot_ap.start_position;
-    char* sup_cursor = sup_ap.start_position;
-    while (sorted_count < median_position) {
-        char pivot = * pivot_cursor;
-        char sup = * sup_cursor;
-        if ( pivot < sup ) pivot_cursor += pivot_ap.iteration_manner;
-        else if ( pivot > sup) sup_cursor += sup_ap.iteration_manner;
-        else {
-            pivot_cursor += pivot_ap.iteration_manner;
-            sup_cursor += sup_ap.iteration_manner;
-            sorted_count ++;
+        if (sorted_count == median_position) {
+            median += * current_cursor;
+            if (!is_even) return median;
         }
-        sorted_count ++;
+        else if (sorted_count == median_position + 1) {
+            median += * current_cursor;
+            median /= 2;
+            return median;
+        }
+        if (pivot_cursor == first_end_position) {
+            current_cursor = sup_cursor;
+            sup_cursor += 1;
+        } else {
+            if (pivot > sup && sup_cursor != second_end_position) {
+                current_cursor = sup_cursor;
+                sup_cursor += 1;
+            } else {
+                current_cursor = pivot_cursor;
+                pivot_cursor += 1;
+            }
+        }
+        sorted_count++;
     }
 }
 
@@ -64,21 +45,19 @@ int main() {
     scanf("%d", & num_of_test_case);
     getchar();
     for (int current_case = 0; current_case < num_of_test_case; current_case ++) {
-        size_t first_array_length, first_string_length;
-        char* first_array_string = NULL;
-        int first_array_ascending;
-
-        size_t second_array_length, second_string_length;
-        char* second_array_string = NULL;
-        int second_array_ascending;
-
-        scanf("%d %d\n", & first_array_length, & second_array_length);
-        first_string_length = 2 * first_array_length;
-        second_string_length = 2 * second_array_length;
-
-        get_array_string_from_input(first_array_string, & first_string_length, & first_array_ascending);
-        get_array_string_from_input(second_array_string, & second_string_length, & second_array_ascending);
-
+        long long int first_length;
+        long long int second_length;
+        scanf("%lld %lld\n", & first_length, & second_length);
+        float* first_array = (float* ) malloc(first_length);
+        float* second_array = (float* ) malloc(second_length);
+        for(float* i = first_array; i < (first_array + first_length); i ++) {
+            scanf("%f", i);
+        }
+        for(float* i = second_array; i < (second_array + second_length); i ++) {
+            scanf("%f", i);
+        }
+        float median = get_median(first_array, second_array, first_length, second_length);
+        printf("%.1f\n", median);
     }
 }
 
