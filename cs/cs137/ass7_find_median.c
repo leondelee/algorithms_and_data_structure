@@ -27,7 +27,8 @@ float get_median(float* first_array, float* second_array, long long int first_le
         if (pivot_cursor == first_end_position) {
             current_cursor = sup_cursor;
             sup_cursor += 1;
-        } else {
+        }
+        else {
             if (pivot > sup && sup_cursor != second_end_position) {
                 current_cursor = sup_cursor;
                 sup_cursor += 1;
@@ -48,8 +49,8 @@ int main() {
         long long int first_length;
         long long int second_length;
         scanf("%lld %lld\n", & first_length, & second_length);
-        float* first_array = (float* ) malloc(first_length);
-        float* second_array = (float* ) malloc(second_length);
+        float* first_array = (float* ) malloc(first_length * sizeof(float));
+        float* second_array = (float* ) malloc(second_length * sizeof(float));
         for(float* i = first_array; i < (first_array + first_length); i ++) {
             scanf("%f", i);
         }
