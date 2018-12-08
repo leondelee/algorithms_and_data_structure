@@ -3,13 +3,14 @@
 //
 
 #include <stdio.h>
+#include <assert.h>
 
-typedef Node* node_ptr;
+typedef struct Node* node_ptr;
 struct Node {
     int digit;
     node_ptr next;
 };
-typedef Node* link_list;
+typedef struct Node* link_list;
 
 link_list init();
 int get_length(link_list L);
@@ -20,7 +21,7 @@ link_list list_mul_list(link_list first, link_list second);
 void iterate_list(link_list L);
 
 int main() {
-    int num_cases = 0;
+    int num_cases;
     scanf("%d\n", & num_cases);
     for(int i = 0; i < num_cases; i ++) {
         int new_line_count = 0;
@@ -31,8 +32,8 @@ int main() {
         link_list res_list = init();
         while(scanf("%c", & current_ch) != EOF) {
             if(current_ch == '\n') {
-                if(new_line_count) break;
                 new_line_count ++;
+                if(new_line_count == 2) break;
             }
             current_digit = (int) current_ch - 48;
             if(0 >= current_digit && current_digit <= 9) {
@@ -40,6 +41,9 @@ int main() {
                 else insert(second, current_digit);
             }
         }
+        link_list test = init();
+        insert(test, 1);
+        iterate_list(test);
         res_list = list_mul_list(first, second);
         iterate_list(res_list);
     }
@@ -64,10 +68,10 @@ int get_length(link_list L) {
 }
 
 void insert(link_list L, int candidate) {
-    node_ptr tmp_node = (node_ptr) malloc(sizeof(struct Node));
+    node_ptr tmp_node = init();
     tmp_node->digit = candidate;
-    L->next = tmp_node;
     tmp_node->next = L->next;
+    L->next = tmp_node;
 }
 
 link_list num_mul_list(int number, link_list L) {
@@ -77,7 +81,7 @@ link_list num_mul_list(int number, link_list L) {
     while(current_ptr != NULL) {
         insert(res_linked_list, (number * (current_ptr -> digit)) % 10 + carry);
         carry = (number * (current_ptr -> digit)) % 10;
-        node_ptr = current_ptr -> next;
+        current_ptr = current_ptr -> next;
     }
     return res_linked_list;
 }
@@ -120,8 +124,9 @@ link_list list_mul_list(link_list first, link_list second) {
 
 void iterate_list(link_list L) {
     node_ptr current_ptr = L;
-    while(current_ptr != NULL) {
-        printf("%d", current_ptr -> digit);
+    while(current_ptr -> next != NULL) {
+        printf("%d", current_ptr -> next -> digit);
         current_ptr = current_ptr -> next;
     }
+    printf("\n");
 }
