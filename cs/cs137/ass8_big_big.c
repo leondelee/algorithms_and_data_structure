@@ -15,7 +15,7 @@ typedef struct Node* link_list;
 
 link_list init();
 long long int get_length(link_list L);
-void insert(link_list L, int candidate);
+void insert(link_list L, int candidate, int front);
 link_list num_mul_list(int number, link_list L);
 link_list list_sum(link_list first, link_list second, int difference);
 link_list list_mul_list(link_list first, link_list second);
@@ -30,7 +30,7 @@ int main() {
         int current_digit;
         link_list first = init();
         link_list second = init();
-        link_list res_list = init();
+        link_list res_list;
         while(scanf("%c", & current_ch) != EOF) {
             if(current_ch == '\n') {
                 new_line_count ++;
@@ -38,13 +38,16 @@ int main() {
             }
             current_digit = (int) current_ch - 48;
             if(0 <= current_digit && current_digit <= 9) {
-                if(! new_line_count) insert(first, current_digit);
-                else insert(second, current_digit);
+                if(! new_line_count) insert(first, current_digit, 1);
+                else insert(second, current_digit, 1);
             }
         }
-        link_list test = init();
         res_list = list_mul_list(first, second);
         iterate_list(res_list);
+        if(i != num_cases - 1) printf("\n");
+        free(first);
+        free(second);
+        free(res_list);
     }
     return 0;
 }
@@ -66,11 +69,21 @@ long long int get_length(link_list L) {
     return count;
 }
 
-void insert(link_list L, int candidate) {
-    node_ptr tmp_node = init();
-    tmp_node->digit = candidate;
-    tmp_node->next = L->next;
-    L->next = tmp_node;
+void insert(link_list L, int candidate, int front) {
+    if(front) {
+        node_ptr tmp_node = init();
+        tmp_node->digit = candidate;
+        tmp_node->next = L->next;
+        L->next = tmp_node;
+    }
+    else {
+        node_ptr tmp_node = init();
+        tmp_node->digit = candidate;
+        node_ptr rear = L;
+        while(rear -> next != NULL) rear = rear ->next;
+        rear -> next = tmp_node;
+    }
+    return;
 }
 
 link_list num_mul_list(int number, link_list L) {
@@ -78,50 +91,50 @@ link_list num_mul_list(int number, link_list L) {
     node_ptr current_ptr = L;
     int carry = 0;
     while(current_ptr -> next != NULL) {
-        insert(res_linked_list, (number * (current_ptr -> next -> digit)  + carry) % 10);
-        carry = (number * (current_ptr -> next -> digit) + carry) / 10;
+        int candidate = number * (current_ptr -> next -> digit)  + carry;
+        insert(res_linked_list, candidate % 10, 0);
+        carry = candidate / 10;
         current_ptr = current_ptr -> next;
     }
+    if(carry) insert(res_linked_list, carry, 0);
     return res_linked_list;
 }
 
 link_list list_sum(link_list first, link_list second, int difference) {
-    int first_longer_flag = get_length(first) > get_length(second) + difference ? 1 : 0;
-    link_list under = first_longer_flag == 1 ? second : first;
-    link_list above = first_longer_flag == 0 ? second : first;
-    link_list res_list = init();
     int carry = 0;
     int tic_toc = 0;
-    node_ptr above_ptr = above;
-    node_ptr under_ptr = under;
-    while(above_ptr -> next != NULL) {
-        if(under_ptr -> next == NULL) {
-            insert(res_list, (above_ptr -> next -> digit + carry) % 10);
-            carry = (above_ptr -> next -> digit + carry) / 10;
-        }
-        else if(under_ptr -> next != NULL && tic_toc <= difference){
-            insert(res_list, (above_ptr -> next -> digit + under_ptr -> next -> digit + carry) % 10);
-            carry = (above_ptr -> next -> digit + under_ptr -> next -> digit + carry) / 10;
+    node_ptr above_ptr = first;
+    node_ptr under_ptr = second;
+    link_list res_list = init();
+    while(above_ptr -> next != NULL || under_ptr -> next != NULL) {
+        int candidate = carry;
+        if(under_ptr -> next != NULL && tic_toc >= difference) {
+            candidate += under_ptr -> next -> digit;
             under_ptr = under_ptr -> next;
         }
+        if(above_ptr -> next != NULL) {
+            candidate += above_ptr -> next -> digit;
+            above_ptr = above_ptr -> next;
+        }
+        insert(res_list, candidate % 10, 0);
+        carry = candidate / 10;
         tic_toc ++;
-        above_ptr = above_ptr -> next;
     }
+    if(carry) insert(res_list, carry, 0);
+    free(first);
+    free(second);
     return res_list;
 }
 
 link_list list_mul_list(link_list first, link_list second) {
-    int first_longer_flag = get_length(first) > get_length(second) ? 1 : 0;
-    link_list under = first_longer_flag == 1 ? second : first;
-    link_list above = first_longer_flag == 0 ? second : first;
-    node_ptr under_ptr = under;
+    node_ptr under_ptr = second;
     link_list last_list = init();
-    insert(last_list, 0);
+    link_list this_list;
+    insert(last_list, 0, 1);
     long long int digits = 0;
     while(under_ptr -> next != NULL) {
-        link_list this_list = num_mul_list(under_ptr -> next -> digit, above);
+        this_list = num_mul_list(under_ptr -> next -> digit, first);
         last_list = list_sum(last_list, this_list, digits);
-        iterate_list(last_list);
         digits ++;
         under_ptr = under_ptr -> next;
     }
@@ -129,10 +142,7 @@ link_list list_mul_list(link_list first, link_list second) {
 }
 
 void iterate_list(link_list L) {
-    node_ptr current_ptr = L;
-    while(current_ptr -> next != NULL) {
-        printf("%d", current_ptr -> next -> digit);
-        current_ptr = current_ptr -> next;
-    }
-    printf("\n");
+    if(L -> next == NULL) return;
+    iterate_list(L -> next);
+    printf("%d", L -> next -> digit);
 }
