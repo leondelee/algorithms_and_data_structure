@@ -9,6 +9,7 @@
 #define Nan 1000000
 
 typedef struct TwoParts* node;
+
 struct TwoParts {
     double*** parts;
     int l_cnt;
@@ -92,7 +93,7 @@ node divide(double** pts, int start, int stop, int index) {
 
 double find_min(double** pts, int start, int stop) {
     if(stop - start == 1) return distance(pts[start], pts[stop]);
-    if(stop - start == 0) return Nan;
+    if(stop - start <= 0) return Nan;
     double mid_x = pts[(start + stop) / 2][0];
     node parts_node = divide(pts, start, stop, 0);
     double** left_part = parts_node -> parts[0];
@@ -109,7 +110,9 @@ double find_min(double** pts, int start, int stop) {
     for(int i = 0; i < stop - start; i ++) {
         if(abs(pts[i][0] - mid_x) < min) mid_cnt ++;
     }
+    if(mid_cnt == 0) return min;
     double** central_points = (double **) malloc(sizeof(double) * mid_cnt);
+    assert(mid_cnt > 0);
     mid_cnt = 0;
     for(int i = 0; i < stop - start; i ++) {
         if(abs(pts[i][0] - mid_x) < min) {
@@ -119,14 +122,13 @@ double find_min(double** pts, int start, int stop) {
     }
     quick_sort(central_points, 0, mid_cnt - 1, 1);
     for(int j = 0; j < mid_cnt; j ++) {
-        int counted = 0;
-        if(j + counted < mid_cnt && counted < 6) {
+        int counted = 1;
+        if(j + counted < mid_cnt && counted < 7) {
             min = min <= distance(central_points[j], central_points[j + counted]) ? min : distance(central_points[j], central_points[j + counted]);
         }
     }
     return min;
 }
-
 
 int main() {
     int num_pts;
@@ -138,7 +140,7 @@ int main() {
             pts[i] = (double *) malloc(sizeof(double) * 2);
             scanf("%lf %lf", pts[i], pts[i] + 1);
         }
-        quick_sort(pts, 0, num_pts - 1, 1);
+        quick_sort(pts, 0, num_pts - 1, 0);
         double min = find_min(pts, 0, num_pts - 1);
         printf("%.2lf\n", min);
     }
