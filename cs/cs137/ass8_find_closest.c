@@ -6,41 +6,33 @@
 #include <assert.h>
 
 #define debug_assert assert(1 == 2);
-#define Nan 1000000
+#define Nan 10000000
 
 typedef struct TwoParts* node;
 
 struct TwoParts {
-    double*** parts;
     int l_cnt;
     int r_cnt;
 };
 
-double distance(double* p1, double* p2) {
+double distance(int* p1, int* p2) {
     return sqrt(
             (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1])
-            );
+    );
 }
 
-int equal(double x, double y) {
+int equal(int x, int y) {
     return x == y;
 }
 
-void my_swap(double** p1, double** p2) {
-    double* temp = *p1;
+void my_swap(int** p1, int** p2) {
+    int* temp = *p1;
     *p1 = *p2;
     *p2 = temp;
 }
 
-void print_pts(double** pts, int num_pts) {
-    for(int i = 0; i < num_pts; i ++) {
-        printf("x=%lf, y=%lf\n", pts[i][0], pts[i][1]);
-    }
-    return;
-}
-
-int partition(double** pts, int start, int stop, int index) {
-    double pivot = pts[(start + stop) / 2][index];
+int partition(int** pts, int start, int stop, int index) {
+    int pivot = pts[(start + stop) / 2][index];
     int front = start;
     int tail = stop;
     while(front < tail) {
@@ -52,7 +44,7 @@ int partition(double** pts, int start, int stop, int index) {
     return front;
 }
 
-void quick_sort(double** pts, int start, int stop, int index) {
+void quick_sort(int** pts, int start, int stop, int index) {
     if(start >= stop) return;
     int prt = partition(pts, start, stop, index);
     quick_sort(pts, start, prt - 1, index);
@@ -60,73 +52,59 @@ void quick_sort(double** pts, int start, int stop, int index) {
     return;
 }
 
-node divide(double** pts, int start, int stop, int index) {
-    double*** res = (double ***) malloc(sizeof(double **) * 2);
+node divide(int** pts, int start, int stop, int index) {
     int middle_idx = (start + stop) / 2;
-    double pivot_index = pts[middle_idx][index];
-    int l_cnt, r_cnt;
-    for(int i = 0; i < stop - start; i ++) {
+    int pivot_index = pts[middle_idx][index];
+    int l_cnt = 0;
+    int r_cnt = 0;
+    for(int i = start; i < stop; i ++) {
         if(pts[i][index] <= pivot_index) l_cnt ++;
         else r_cnt ++;
     }
-    double** left_part = (double *) malloc(sizeof(double) * l_cnt);
-    double** right_part = (double *) malloc(sizeof(double) * r_cnt);
-    l_cnt = r_cnt = 0;
-    for(int i = 0; i < stop - start; i ++) {
-        if(pts[i][index] <= pivot_index) {
-               left_part[l_cnt] = pts[i];
-               l_cnt ++;
-        }
-        else {
-            right_part[r_cnt] = pts[i];
-            r_cnt ++;
-        }
-    }
-    res[0] = left_part;
-    res[1] = right_part;
     node res_node = (node) malloc(sizeof(struct TwoParts));
-    res_node -> parts = res;
     res_node -> l_cnt = l_cnt;
     res_node -> r_cnt = r_cnt;
     return res_node;
 }
 
-double find_min(double** pts, int start, int stop) {
+double find_min(int** pts, int start, int stop) {
     if(stop - start == 1) return distance(pts[start], pts[stop]);
     if(stop - start <= 0) return Nan;
-    double mid_x = pts[(start + stop) / 2][0];
+    int mid_x = pts[(start + stop) / 2][0];
     node parts_node = divide(pts, start, stop, 0);
-    double** left_part = parts_node -> parts[0];
-    double** right_part = parts_node -> parts[1];
     int l_cnt = parts_node -> l_cnt;
     int r_cnt = parts_node -> r_cnt;
-    free(parts_node -> parts);
-    free(parts_node);
-    double left_min = find_min(left_part, 0, l_cnt - 1);
-    double right_min = find_min(right_part, 0, r_cnt - 1);
+    double left_min = find_min(pts, start, start + l_cnt - 1);
+    double right_min = find_min(pts, start + l_cnt - 1, stop);
     double min = left_min <= right_min ? left_min : right_min;
     // find central points
     int mid_cnt = 0;
-    for(int i = 0; i < stop - start; i ++) {
+    for(int i = start; i < stop; i ++) {
         if(abs(pts[i][0] - mid_x) < min) mid_cnt ++;
     }
-    if(mid_cnt == 0) return min;
-    double** central_points = (double **) malloc(sizeof(double) * mid_cnt);
+    if(mid_cnt == 0) {
+        return min;
+    }
+    int** central_points = (int **) malloc(sizeof(int*) * mid_cnt);
     assert(mid_cnt > 0);
     mid_cnt = 0;
-    for(int i = 0; i < stop - start; i ++) {
+    for(int i = start; i < stop; i ++) {
         if(abs(pts[i][0] - mid_x) < min) {
-            central_points[mid_cnt] = pts[i];
+            central_points[mid_cnt] = (int *) malloc(sizeof(int) * 2);
+            central_points[mid_cnt][0] = pts[i][0];
+            central_points[mid_cnt][1] = pts[i][1];
             mid_cnt ++;
         }
     }
     quick_sort(central_points, 0, mid_cnt - 1, 1);
     for(int j = 0; j < mid_cnt; j ++) {
-        int counted = 1;
-        if(j + counted < mid_cnt && counted < 7) {
-            min = min <= distance(central_points[j], central_points[j + counted]) ? min : distance(central_points[j], central_points[j + counted]);
+        for(int counted = 1; counted < 7; counted ++) {
+            if(j + counted < mid_cnt) {
+                min = min <= distance(central_points[j], central_points[j + counted]) ? min : distance(central_points[j], central_points[j + counted]);
+            }
         }
     }
+    free(central_points);
     return min;
 }
 
@@ -135,13 +113,14 @@ int main() {
     while(1) {
         scanf("%d", & num_pts);
         if(! num_pts) break;
-        double **pts = (double **) malloc(sizeof(double *) * num_pts);
+        int **pts = (int **) malloc(sizeof(int *) * num_pts);
         for(int i = 0; i < num_pts; i++) {
-            pts[i] = (double *) malloc(sizeof(double) * 2);
-            scanf("%lf %lf", pts[i], pts[i] + 1);
+            pts[i] = (int *) malloc(sizeof(int) * 2);
+            scanf("%d %d", pts[i], pts[i] + 1);
         }
         quick_sort(pts, 0, num_pts - 1, 0);
         double min = find_min(pts, 0, num_pts - 1);
+        free(pts);
         printf("%.2lf\n", min);
     }
 }
