@@ -20,6 +20,8 @@ link_list num_mul_list(int number, link_list L);
 link_list list_sum(link_list first, link_list second, int difference);
 link_list list_mul_list(link_list first, link_list second);
 void iterate_list(link_list L);
+void my_free(link_list L);
+int whether_zero(link_list L);
 
 int main() {
     int num_cases;
@@ -32,22 +34,25 @@ int main() {
         link_list second = init();
         link_list res_list;
         while(scanf("%c", & current_ch) != EOF) {
-            if(current_ch == '\n') {
-                new_line_count ++;
-                if(new_line_count == 2) break;
+            if (current_ch == '\n') {
+                new_line_count++;
+                if (new_line_count == 2) break;
             }
             current_digit = (int) current_ch - 48;
-            if(0 <= current_digit && current_digit <= 9) {
-                if(! new_line_count) insert(first, current_digit, 1);
+            if (0 <= current_digit && current_digit <= 9) {
+                if (!new_line_count) insert(first, current_digit, 1);
                 else insert(second, current_digit, 1);
             }
         }
-        res_list = list_mul_list(first, second);
-        iterate_list(res_list);
+        if(whether_zero(first) || whether_zero(second)) printf("0");
+        else {
+            res_list = list_mul_list(first, second);
+            iterate_list(res_list);
+            my_free(res_list);
+        }
         if(i != num_cases - 1) printf("\n");
-        free(first);
-        free(second);
-        free(res_list);
+        my_free(first);
+        my_free(second);
     }
     return 0;
 }
@@ -121,8 +126,8 @@ link_list list_sum(link_list first, link_list second, int difference) {
         tic_toc ++;
     }
     if(carry) insert(res_list, carry, 0);
-    free(first);
-    free(second);
+    my_free(first);
+    my_free(second);
     return res_list;
 }
 
@@ -145,4 +150,15 @@ void iterate_list(link_list L) {
     if(L -> next == NULL) return;
     iterate_list(L -> next);
     printf("%d", L -> next -> digit);
+}
+
+void my_free(link_list L) {
+    if(L -> next == NULL) return;
+    my_free(L -> next);
+    free(L);
+
+}
+
+int whether_zero(link_list L) {
+    return get_length(L) == 1 && L -> next -> digit == 0;
 }
